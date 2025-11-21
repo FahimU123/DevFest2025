@@ -3,11 +3,7 @@ from requests.auth import HTTPBasicAuth
 import datetime
 import json
 
-# -----------------------------------------------------
-# CONFIG – YOUR NLU CREDENTIALS
-# -----------------------------------------------------
-
-Replace with your generated API Key and URL
+#Replace with your generated API Key and URL
 API_KEY = "API_KEY"
 BASE_URL = "BASE_URL"
 
@@ -20,13 +16,11 @@ def analyze_pothole_report(date_str: str, lat: float, lon: float):
     Sends a synthetic 'pothole report' sentence to Watson NLU and
     prints out entities/keywords/etc.
     """
-    # 1) Build some basic text for NLU to analyze
     text = (
         f"There is a pothole reported on {date_str} at coordinates "
         f"latitude {lat} and longitude {lon} in Michigan."
     )
 
-    # 2) Choose what you want NLU to extract
     payload = {
         "text": text,
         "features": {
@@ -45,7 +39,6 @@ def analyze_pothole_report(date_str: str, lat: float, lon: float):
         "Content-Type": "application/json"
     }
 
-    # 3) Call NLU with basic auth (username = 'apikey', password = API_KEY)
     response = requests.post(
         NLU_URL,
         headers=headers,
@@ -67,3 +60,4 @@ if __name__ == "__main__":
     lon = -83.0458
 
     analyze_pothole_report(today, lat, lon)
+
