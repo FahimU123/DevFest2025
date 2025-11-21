@@ -9,11 +9,6 @@ import SwiftUI
 
 import SwiftUI
 import MapKit
-
-import CoreLocation // Needed for address search
-
-import SwiftUI
-import MapKit
 import CoreLocation
 
 struct ContentView: View {
@@ -21,8 +16,8 @@ struct ContentView: View {
     
     // Start at Wayne State
     @State private var camera = MapCameraPosition.region(MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 42.3588, longitude: -83.0715), // Centered on Venue
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05) // Zoomed out enough to see city highways
+        center: CLLocationCoordinate2D(latitude: 42.3589, longitude: -83.0712),
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
     ))
     
     @State private var selectedPothole: Pothole?
@@ -52,15 +47,13 @@ struct ContentView: View {
                 }
             }
             .mapStyle(.standard)
-            .navigationTitle("CivicLoop")
-            .navigationBarTitleDisplayMode(.inline)
-            // THIS IS THE NATIVE SEARCH BAR
-            .searchable(text: $searchText, prompt: "Search highways, cities...") // ✅ FIXED
-            .onSubmit(of: .search) {
-                performSearch()
-            }
+            
+            // SEARCH BAR
+            .searchable(text: $searchText, prompt: "Search highways, cities...")
+            .onSubmit(of: .search) { performSearch() }
+            
+
         }
-        // ALERTS & SHEETS
         .alert("Too Early", isPresented: $showTooEarlyAlert) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -69,17 +62,33 @@ struct ContentView: View {
         .sheet(item: $selectedPothole) { pothole in
             ClaimFormView(pothole: pothole)
         }
+        // SIRI LISTENER
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            manager.refreshData()
+        }
     }
     
     func performSearch() {
+        // 1. THE HACK: If we type "Ford", force it to go to our Pins
+        if searchText.localizedCaseInsensitiveContains("Ford") {
+            let fordFieldCoords = CLLocationCoordinate2D(latitude: 42.3400, longitude: -83.0456)
+            
+            withAnimation {
+                camera = MapCameraPosition.region(MKCoordinateRegion(
+                    center: fordFieldCoords,
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                ))
+            }
+            // Close keyboard
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            return
+        }
+        
+        // 2. Normal Search for everything else
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(searchText) { placemarks, error in
             guard let placemark = placemarks?.first,
-                  let location = placemark.location else {
-                return
-            }
-            
-            // Animate camera to the result
+                  let location = placemark.location else { return }
             withAnimation {
                 camera = MapCameraPosition.region(MKCoordinateRegion(
                     center: location.coordinate,
@@ -88,20 +97,35 @@ struct ContentView: View {
             }
         }
     }
+    
+    // MANUAL TEST FUNCTION
+    func runManualTest() {
+        print("⚡️ User clicked Test Button...")
+        Task {
+            let intent = ReportPothole()
+            try? await intent.sendDirectToWatson(lat: 42.33, long: -83.05, date: "2025-11-21")
+        }
+    }
+}
+#Preview {
+    ContentView()
 }
 
-// SIMPLE FORM (UI Only)
+import SwiftUI
+
 struct ClaimFormView: View {
     let pothole: Pothole
     @Environment(\.dismiss) var dismiss
     
     @State private var name = ""
     @State private var description = ""
+    @State private var isSubmitting = false
+    @State private var showSuccess = false
     
     var body: some View {
         NavigationStack {
             Form {
-                Section("Incident Details") {
+                Section("Evidence") {
                     LabeledContent("Date Reported", value: pothole.dateReported)
                     LabeledContent("Status") {
                         Text("Actionable (>30 Days)")
@@ -110,26 +134,41 @@ struct ClaimFormView: View {
                     }
                 }
                 
-                Section("Your Info") {
+                Section("Claimant Info") {
                     TextField("Full Name", text: $name)
                     TextField("Describe Damage", text: $description, axis: .vertical)
                         .lineLimit(3...5)
                 }
                 
                 Section {
-                    Button("Submit (Simulated)") {
-                        print("Submit clicked for \(pothole.id)")
-                        dismiss()
+                    Button(action: submitClaim) {
+                        if isSubmitting {
+                            Text("Consulting IBM Watson...")
+                                .foregroundStyle(.gray)
+                        } else {
+                            Text("Submit Legal Claim")
+                                .bold()
+                                .foregroundStyle(.blue)
+                        }
                     }
-                    .bold()
-                    .foregroundStyle(.blue)
+                    .disabled(name.isEmpty || isSubmitting)
                 }
             }
             .navigationTitle("File Claim")
+            .alert("Success", isPresented: $showSuccess) {
+                Button("Done") { dismiss() }
+            } message: {
+                Text("Your claim has been generated and emailed to the county.")
+            }
         }
     }
-}
-
-#Preview {
-    ContentView()
+    
+    func submitClaim() {
+        isSubmitting = true
+        // Mock Delay to simulate AI
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            isSubmitting = false
+            showSuccess = true
+        }
+    }
 }

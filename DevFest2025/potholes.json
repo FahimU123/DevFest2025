@@ -1,14 +1,58 @@
 [
-  { "id": "A1B2-C3D4-E5F6", "lat": 42.3588, "long": -83.0715, "dateReported": "2025-10-15" }, 
-  { "id": "98A1-23B4-56C7", "lat": 42.3400, "long": -83.0456, "dateReported": "2025-09-10" }, 
-  { "id": "D4E5-F6G7-H8I9", "lat": 42.3180, "long": -83.0750, "dateReported": "2025-11-20" }, 
-  { "id": "12F3-45G6-78H9", "lat": 42.2160, "long": -83.3550, "dateReported": "2025-08-25" }, 
-  { "id": "B2C3-D4E5-F6G7", "lat": 42.5630, "long": -83.1600, "dateReported": "2025-11-05" }, 
-  { "id": "78J9-01K2-34L5", "lat": 42.2808, "long": -83.7430, "dateReported": "2025-09-12" }, 
-  { "id": "M6N7-O8P9-Q0R1", "lat": 43.0125, "long": -83.6875, "dateReported": "2025-11-19" }, 
-  { "id": "S2T3-U4V5-W6X7", "lat": 42.7325, "long": -84.5555, "dateReported": "2025-08-15" }, 
-  { "id": "Y8Z9-A0B1-C2D3", "lat": 42.9634, "long": -85.6681, "dateReported": "2025-11-01" }, 
-  { "id": "E4F5-G6H7-I8J9", "lat": 45.8171, "long": -84.7278, "dateReported": "2025-07-04" }, 
-  { "id": "K0L1-M2N3-O4P5", "lat": 42.4890, "long": -83.1450, "dateReported": "2025-11-18" }, 
-  { "id": "Q6R7-S8T9-U0V1", "lat": 42.3223, "long": -83.2070, "dateReported": "2025-11-10" } 
+  {
+    "id": "WSU-RED-001",
+    "lat": 42.3588,
+    "long": -83.0715,
+    "dateReported": "2025-09-15",
+    "locationName": "WSU - Warren Ave / Anthony Wayne"
+  },
+  {
+    "id": "WSU-YELLOW-002",
+    "lat": 42.3592,
+    "long": -83.0710,
+    "dateReported": "2025-11-20",
+    "locationName": "WSU - Gullen Mall"
+  },
+  {
+    "id": "WSU-RED-003",
+    "lat": 42.3560,
+    "long": -83.0690,
+    "dateReported": "2025-10-05",
+    "locationName": "WSU - Cass Ave / Putnam"
+  },
+  {
+    "id": "WSU-YELLOW-004",
+    "lat": 42.3610,
+    "long": -83.0650,
+    "dateReported": "2025-11-18",
+    "locationName": "WSU - Woodward Near QLine"
+  },
+  {
+    "id": "FORD-RED-001",
+    "lat": 42.3405,
+    "long": -83.0460,
+    "dateReported": "2025-08-15",
+    "locationName": "Ford Field - Brush St Entrance"
+  },
+  {
+    "id": "FORD-RED-002",
+    "lat": 42.3390,
+    "long": -83.0485,
+    "dateReported": "2025-10-01",
+    "locationName": "Ford Field - Adams Ave"
+  },
+  {
+    "id": "FORD-YELLOW-003",
+    "lat": 42.3415,
+    "long": -83.0440,
+    "dateReported": "2025-11-15",
+    "locationName": "Ford Field - I-375 Service Dr"
+  },
+  {
+    "id": "FORD-YELLOW-004",
+    "lat": 42.3420,
+    "long": -83.0470,
+    "dateReported": "2025-11-21",
+    "locationName": "Ford Field - Montcalm St"
+  }
 ]
