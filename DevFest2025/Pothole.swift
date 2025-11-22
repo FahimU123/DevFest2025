@@ -65,10 +65,10 @@ struct ReportPothole: AppIntent {
     static var title: LocalizedStringResource = "Report Pothole"
     static var description = IntentDescription("Logs hazard and sends directly to IBM Watson.")
     
-    // --- CONFIGURATION (YOUR REAL KEYS) ---
+    //  CONFIGURATION (OUR KEYS)
     let ibmApiKey = "m3Dr8kSVw7d9FBP-2FPbnPCIRmpIPK891WhV6M4Ikl40"
     let ibmUrl = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/f31f1d3f-7172-4881-90c2-5ede109293bc/v1/analyze?version=2022-04-07"
-    // --------------------------------------
+    //
     
     func perform() async throws -> some IntentResult & ReturnsValue<String> {
         
@@ -150,7 +150,7 @@ struct ReportPothole: AppIntent {
     }
 }
 
-// 🚀 REGISTER SHORTCUT WITH SIRI
+// REGISTER SHORTCUT WITH SIRI
 struct CivicLoopShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
